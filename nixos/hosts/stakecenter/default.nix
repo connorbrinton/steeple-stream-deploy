@@ -52,7 +52,7 @@
 
   services.steeple-stream = {
     enable = true;
-    package = steeple-stream.packages.${pkgs.system}.steeple-stream;
+    package = steeple-stream.packages.${pkgs.stdenv.hostPlatform.system}.steeple-stream;
     host = "127.0.0.1";
     port = 8080;
     publicBaseUrl = "https://broadcasts.example.org";
