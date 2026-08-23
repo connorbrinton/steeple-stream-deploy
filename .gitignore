@@ -1,0 +1,12 @@
+.direnv/
+result
+result-*
+.env
+.env.*
+*.agekey
+*.key
+*.pem
+cloudflared.yml
+Pulumi.*.yaml
+node_modules/
+dist/

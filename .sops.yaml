@@ -1,0 +1,11 @@
+keys:
+  - &maintainer age1replacewithmaintainerrecipient0000000000000000000000000000000000000000000000
+  - &beelink age1replacewithbeelinkrecipient000000000000000000000000000000000000000000000000
+
+creation_rules:
+  - path_regex: secrets/.*\.yaml$
+    encrypted_regex: "^(data|stringData|cloudflared|steepleStream|gcp|oauth)$"
+    key_groups:
+      - age:
+          - *maintainer
+          - *beelink

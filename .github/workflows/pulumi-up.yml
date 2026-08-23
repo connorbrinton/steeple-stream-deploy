@@ -1,0 +1,43 @@
+name: Pulumi Up
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - infra/cloudflare-gcp/**
+      - .github/workflows/pulumi-up.yml
+
+jobs:
+  up:
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      contents: write
+    defaults:
+      run:
+        working-directory: infra/cloudflare-gcp
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: infra/cloudflare-gcp/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - uses: pulumi/actions@v6
+        with:
+          command: up
+          stack-name: production
+          work-dir: infra/cloudflare-gcp
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+      - name: Sync Pulumi outputs into SOPS
+        run: ../../scripts/sync-pulumi-secrets.sh
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}

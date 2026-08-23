@@ -1,0 +1,3 @@
+name: steeple-stream-cloud
+runtime: nodejs
+description: Cloudflare and GCP infrastructure for the Steeple Stream appliance.
