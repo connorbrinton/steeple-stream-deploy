@@ -26,11 +26,10 @@
    sudo grep '# public key:' /var/lib/sops-nix/key.txt
    ```
 
-6. Create real encrypted secrets:
+6. Replace the placeholder secret values with real encrypted secrets:
 
    ```bash
-   cp secrets/stakecenter.example.yaml secrets/stakecenter.yaml
-   sops -e -i secrets/stakecenter.yaml
+   sops secrets/stakecenter.yaml
    ```
 
 7. Run the first manual deployment:

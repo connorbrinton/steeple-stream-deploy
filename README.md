@@ -25,3 +25,8 @@ nix build .#nixosConfigurations.steeple-stream-stakecenter.config.system.build.t
 Real secrets should be stored in `secrets/stakecenter.yaml` with SOPS. Do not
 commit cleartext tunnel tokens, OAuth client secrets, age private keys, or env
 files.
+
+## License
+
+Steeple Stream Deploy is licensed under the GNU Affero General Public License
+v3.0. See [LICENSE](LICENSE).
