@@ -1,12 +1,15 @@
 # Maintenance
 
-## App Updates
+## Nix Input Updates
 
-Update the application input in this deployment repository:
+Update a specific input:
 
 ```bash
-nix flake lock --update-input steeple-stream
-git commit -am "Update Steeple Stream"
+nix flake update nixpkgs
+nix flake update sops-nix
+nix flake update comin
+git add flake.lock
+git commit -m "Update deployment inputs"
 git push
 ```
 
@@ -18,13 +21,14 @@ the Beelink.
 Edit encrypted secrets with SOPS:
 
 ```bash
-sops secrets/stakecenter.yaml
-git commit -am "Rotate appliance secrets"
+sops secrets/steeplestream.yaml
+git add secrets/steeplestream.yaml
+git commit -m "Rotate appliance secrets"
 git push
 ```
 
-The Beelink decrypts secrets locally during activation. Do not copy the
-Beelink age private key into GitHub Actions.
+The Beelink decrypts secrets locally during activation. Do not copy the Beelink
+age private key into GitHub Actions or any repository.
 
 ## Rollback
 

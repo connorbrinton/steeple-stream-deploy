@@ -15,4 +15,4 @@ jobs:
           extra_nix_config: |
             experimental-features = nix-command flakes
       - run: nix flake check
-      - run: nix build .#nixosConfigurations.steeple-stream-stakecenter.config.system.build.toplevel
+      - run: nix build .#nixosConfigurations.nixos.config.system.build.toplevel

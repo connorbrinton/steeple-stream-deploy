@@ -1,50 +1,85 @@
 # Beelink Bootstrap
 
-1. Install NixOS on the Beelink MINI S13.
-2. Clone this deployment repository.
-3. Ensure the public `steeple-stream` application repository exists, then lock
-   deployment inputs:
+This repository currently models the first comin adoption of the already
+installed Steeple Stream mini PC.
+
+The first adoption intentionally keeps the existing hostname and SSH posture:
+
+- flake output: `nixosConfigurations.nixos`
+- hostname: `nixos`
+- direct LAN SSH remains enabled
+- password SSH remains enabled
+- Cloudflare browser SSH compatibility MACs remain enabled
+- GNOME remains installed
+
+Hardening and hostname cleanup should happen only after comin has proven it can
+deploy reliably.
+
+## Prerequisites
+
+The host-local age private key must already exist on the appliance:
+
+```bash
+/root/.config/sops/age/keys.txt
+```
+
+Never commit that file. The encrypted SOPS file in this repository is safe to
+commit because it contains ciphertext only:
+
+```bash
+secrets/steeplestream.yaml
+```
+
+The initial Cloudflare Tunnel route is managed remotely in Cloudflare and points
+browser/terminal SSH at localhost port 22 on the appliance.
+
+## First Manual Switch
+
+Clone this repository on the appliance or copy it into a temporary working
+directory, then run:
+
+```bash
+nixos-rebuild switch \
+  --sudo \
+  --flake .#nixos
+```
+
+If the running system has not picked up flake support yet, add the one-time
+option:
+
+```bash
+nixos-rebuild switch \
+  --sudo \
+  --flake .#nixos \
+  --option experimental-features 'nix-command flakes'
+```
+
+## Verification
+
+After the first switch, verify the services that protect remote access:
+
+```bash
+systemctl status cloudflared.service
+systemctl status sshd.service
+systemctl status comin.service
+journalctl -u comin.service -n 100 --no-pager
+```
+
+Then test a harmless comin deployment:
+
+1. Make a trivial repository change.
+2. Commit and push it to `main`.
+3. Watch comin apply the change:
 
    ```bash
-   nix flake lock
-   git add flake.lock
-   git commit -m "Lock deployment inputs"
+   journalctl -u comin.service -f
    ```
 
-4. Generate hardware configuration:
+## Later Hardening
 
-   ```bash
-   sudo nixos-generate-config --show-hardware-config > nixos/hosts/stakecenter/hardware-configuration.nix
-   ```
+After comin and Cloudflare SSH are proven reliable:
 
-5. Generate the Beelink age key and copy the public recipient into `.sops.yaml`:
-
-   ```bash
-   sudo mkdir -p /var/lib/sops-nix
-   sudo age-keygen -o /var/lib/sops-nix/key.txt
-   sudo chmod 0400 /var/lib/sops-nix/key.txt
-   sudo grep '# public key:' /var/lib/sops-nix/key.txt
-   ```
-
-6. Replace the placeholder secret values with real encrypted secrets:
-
-   ```bash
-   sops secrets/stakecenter.yaml
-   ```
-
-7. Run the first manual deployment:
-
-   ```bash
-   sudo nixos-rebuild switch --flake .#steeple-stream-stakecenter
-   ```
-
-8. Verify services:
-
-   ```bash
-   systemctl status steeple-stream
-   systemctl status cloudflared
-   systemctl status comin
-   ```
-
-After the first deployment, comin should pull and apply future changes from the
-deployment repository.
+- disable SSH password authentication
+- consider binding SSH to loopback only
+- rename the hostname to a location-specific name
+- add the Steeple Stream application service and public broadcast ingress

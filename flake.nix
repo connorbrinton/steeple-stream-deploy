@@ -2,21 +2,26 @@
   description = "Steeple Stream Beelink appliance deployment";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    steeple-stream.url = "github:connorbrinton/steeple-stream";
-    comin.url = "github:nlewo/comin";
-    sops-nix.url = "github:Mic92/sops-nix";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+
+    comin = {
+      url = "github:nlewo/comin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, steeple-stream, comin, sops-nix }:
+  outputs = { nixpkgs, comin, sops-nix, ... }:
     let
       system = "x86_64-linux";
     in {
-      nixosConfigurations.steeple-stream-stakecenter = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit self steeple-stream; };
         modules = [
-          steeple-stream.nixosModules.default
           comin.nixosModules.comin
           sops-nix.nixosModules.sops
           ./nixos/hosts/stakecenter
