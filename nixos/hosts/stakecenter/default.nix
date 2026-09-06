@@ -76,6 +76,8 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.settings.trusted-users = [ "root" "@wheel" ];
 
+  environment.etc."steeple-stream-deployment-check".text = "comin adoption verified\n";
+
   environment.systemPackages = [
     pkgs.age
     pkgs.cloudflared
