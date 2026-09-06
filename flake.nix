@@ -2,6 +2,8 @@
   description = "Steeple Stream Beelink appliance deployment";
 
   inputs = {
+    steeple-stream.url = "github:connorbrinton/steeple-stream";
+
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
 
     comin = {
@@ -15,7 +17,7 @@
     };
   };
 
-  outputs = { nixpkgs, comin, sops-nix, ... }:
+  outputs = { nixpkgs, comin, sops-nix, steeple-stream, ... }:
     let
       system = "x86_64-linux";
     in {
@@ -25,6 +27,9 @@
           comin.nixosModules.comin
           sops-nix.nixosModules.sops
           ./nixos/hosts/stakecenter
+          {
+            environment.systemPackages = [ steeple-stream.packages.${system}.steeple-stream ];
+          }
         ];
       };
     };

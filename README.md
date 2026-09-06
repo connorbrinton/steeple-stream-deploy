@@ -19,6 +19,10 @@ specific appliance.
 
 ## First Build
 
+The appliance installs the pinned `steeple-stream` command and its media runtime.
+The application service is not enabled yet; authentication and runtime
+configuration are the next deployment step.
+
 ```bash
 nix build .#nixosConfigurations.nixos.config.system.build.toplevel
 ```

@@ -70,11 +70,28 @@
         "type": "github"
       }
     },
+    "nixpkgs_3": {
+      "locked": {
+        "lastModified": 1784872115,
+        "narHash": "sha256-THPEF2po0fsoH8gNtp+Ae0XFDJH3N/ol7xO3v6VMTJU=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "335f0738cb2fa9708f3f428e39d2eae975d1338d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "comin": "comin",
         "nixpkgs": "nixpkgs_2",
-        "sops-nix": "sops-nix"
+        "sops-nix": "sops-nix",
+        "steeple-stream": "steeple-stream"
       }
     },
     "sops-nix": {
@@ -94,6 +111,24 @@
       "original": {
         "owner": "Mic92",
         "repo": "sops-nix",
+        "type": "github"
+      }
+    },
+    "steeple-stream": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_3"
+      },
+      "locked": {
+        "lastModified": 1787518118,
+        "narHash": "sha256-OGX2yim0TIBxcRXhY4kA05WqeSj/lyo+u1bLZ9zc1o8=",
+        "owner": "connorbrinton",
+        "repo": "steeple-stream",
+        "rev": "9f9256cee9f4a8aa0b031a56373efa14150d8100",
+        "type": "github"
+      },
+      "original": {
+        "owner": "connorbrinton",
+        "repo": "steeple-stream",
         "type": "github"
       }
     },

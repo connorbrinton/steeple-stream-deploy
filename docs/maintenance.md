@@ -8,6 +8,7 @@ Update a specific input:
 nix flake update nixpkgs
 nix flake update sops-nix
 nix flake update comin
+nix flake update steeple-stream
 git add flake.lock
 git commit -m "Update deployment inputs"
 git push
