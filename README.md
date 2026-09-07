@@ -28,6 +28,11 @@ The existing remotely managed tunnel must route `broadcasts.brintonium.com` to
 including API and media paths, and preserve the SSH ingress route. Tunnel routes
 are currently managed in Cloudflare, not by this NixOS configuration.
 
+NDI reception uses single TCP on this appliance: direct receiver tests received
+audio and video over TCP but timed out using the default transport. The
+receiver-only SDK configuration lives at
+`/etc/steeple-stream/ndi/ndi-config.v1.json`; no camera configuration is changed.
+
 ```bash
 nix build .#nixosConfigurations.nixos.config.system.build.toplevel
 ```

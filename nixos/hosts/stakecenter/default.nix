@@ -156,10 +156,22 @@
   };
 
   systemd.services.steeple-stream.environment = {
+    NDI_CONFIG_DIR = "/etc/steeple-stream/ndi";
     STEEPLE_PROFILE = "camera-control";
     STEEPLE_AUTH_MODE = "trusted-proxy";
     STEEPLE_ADMIN_EMAILS = "connor@brintonium.com";
     STEEPLE_CHANNEL_ID = "stakecenter";
+  };
+
+  # The camera's default UDP transport does not deliver media on this network.
+  # Disabling the optional transports selects NDI's base single-TCP connection.
+  environment.etc."steeple-stream/ndi/ndi-config.v1.json".text = builtins.toJSON {
+    ndi = {
+      rudp.recv.enable = false;
+      tcp.recv.enable = false;
+      unicast.recv.enable = false;
+      multicast.recv.enable = false;
+    };
   };
 
   system.stateVersion = "26.05";
