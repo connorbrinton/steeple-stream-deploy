@@ -147,5 +147,20 @@
     }];
   };
 
+  services.steeple-stream = {
+    enable = true;
+    host = "127.0.0.1";
+    publicBaseUrl = "https://broadcasts.brintonium.com";
+    publicWebRtc = false;
+    trustedProxy = true;
+  };
+
+  systemd.services.steeple-stream.environment = {
+    STEEPLE_PROFILE = "camera-control";
+    STEEPLE_AUTH_MODE = "trusted-proxy";
+    STEEPLE_ADMIN_EMAILS = "connor@brintonium.com";
+    STEEPLE_CHANNEL_ID = "stakecenter";
+  };
+
   system.stateVersion = "26.05";
 }

@@ -26,6 +26,7 @@
         modules = [
           comin.nixosModules.comin
           sops-nix.nixosModules.sops
+          steeple-stream.nixosModules.default
           ./nixos/hosts/stakecenter
           {
             environment.systemPackages = [ steeple-stream.packages.${system}.steeple-stream ];

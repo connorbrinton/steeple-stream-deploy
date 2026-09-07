@@ -19,9 +19,14 @@ specific appliance.
 
 ## First Build
 
-The appliance installs the pinned `steeple-stream` command and its media runtime.
-The application service is not enabled yet; authentication and runtime
-configuration are the next deployment step.
+The appliance runs the pinned Steeple Stream service in camera-control mode on
+`127.0.0.1:8080`. It trusts Cloudflare Access email headers from loopback and uses
+live-only in-memory HLS preview. Its state is in `/var/lib/steeple-stream`.
+
+The existing remotely managed tunnel must route `broadcasts.brintonium.com` to
+`http://127.0.0.1:8080`. Keep the whole hostname protected by Cloudflare Access,
+including API and media paths, and preserve the SSH ingress route. Tunnel routes
+are currently managed in Cloudflare, not by this NixOS configuration.
 
 ```bash
 nix build .#nixosConfigurations.nixos.config.system.build.toplevel
