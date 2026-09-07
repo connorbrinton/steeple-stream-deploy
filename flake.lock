@@ -119,11 +119,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1788743279,
-        "narHash": "sha256-RIyAijN7MfkXZR1rw2CFmG/P0wbXvO8GVGImLAZJeXE=",
+        "lastModified": 1788744391,
+        "narHash": "sha256-Mn+Ha2007qdeZFEUmlfKtEQkZjn8jmtwLCMuHOW3kpg=",
         "owner": "connorbrinton",
         "repo": "steeple-stream",
-        "rev": "9707c12fb676ba5e43e4fe13dbfd7ab77453b638",
+        "rev": "c363e4c833db67722fc45bda4d7d3a39e9beb82a",
         "type": "github"
       },
       "original": {
