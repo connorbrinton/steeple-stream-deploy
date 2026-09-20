@@ -31,6 +31,21 @@ git push
 The Beelink decrypts secrets locally during activation. Do not copy the Beelink
 age private key into GitHub Actions or any repository.
 
+The production secret file contains the Cloudflare tunnel token, Google OAuth
+client secret, and Steeple Stream session secret. The Google client ID and
+authorized email addresses are nonsecret values declared in the host's NixOS
+configuration. Keep the session secret stable; rotating it invalidates existing
+application sessions.
+
+The Google OAuth web client must allow this redirect URI:
+
+```text
+https://broadcasts.brintonium.com/auth/google/callback
+```
+
+Cloudflare Access should not protect the application hostname when application
+authentication is enabled. Keep Access enabled for the separate SSH hostname.
+
 ## Rollback
 
 On the Beelink:
