@@ -110,6 +110,20 @@
     secrets.cloudflared_token = {
       restartUnits = [ "cloudflared.service" ];
     };
+
+    secrets.google_client_secret = { };
+    secrets.steeple_session_secret = { };
+
+    templates."steeple-stream.env" = {
+      owner = "steeple-stream";
+      group = "steeple-stream";
+      mode = "0400";
+      restartUnits = [ "steeple-stream.service" ];
+      content = ''
+        STEEPLE_GOOGLE_CLIENT_SECRET=${config.sops.placeholder.google_client_secret}
+        STEEPLE_SESSION_SECRET=${config.sops.placeholder.steeple_session_secret}
+      '';
+    };
   };
 
   systemd.services.cloudflared = {
@@ -153,12 +167,14 @@
     publicBaseUrl = "https://broadcasts.brintonium.com";
     publicWebRtc = false;
     trustedProxy = true;
+    environmentFile = config.sops.templates."steeple-stream.env".path;
   };
 
   systemd.services.steeple-stream.environment = {
     NDI_CONFIG_DIR = "/etc/steeple-stream/ndi";
     STEEPLE_PROFILE = "camera-control";
-    STEEPLE_AUTH_MODE = "trusted-proxy";
+    STEEPLE_AUTH_MODE = "google";
+    STEEPLE_GOOGLE_CLIENT_ID = "919880998796-pr2cumdobajbm3c8ekg3ilo648hsftkf.apps.googleusercontent.com";
     STEEPLE_ADMIN_EMAILS = "connor@brintonium.com";
     STEEPLE_CHANNEL_ID = "stakecenter";
   };
