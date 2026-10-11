@@ -161,11 +161,15 @@
     }];
   };
 
+  # WebRTC media uses direct UDP to the Beelink from devices on the chapel LAN.
+  # WHEP signaling still passes through the existing Cloudflare HTTPS tunnel.
+  networking.firewall.allowedUDPPorts = [ 8189 ];
+
   services.steeple-stream = {
     enable = true;
     host = "127.0.0.1";
     publicBaseUrl = "https://broadcasts.brintonium.com";
-    publicWebRtc = false;
+    publicWebRtc = true;
     trustedProxy = true;
     environmentFile = config.sops.templates."steeple-stream.env".path;
   };
