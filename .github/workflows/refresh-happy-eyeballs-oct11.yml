@@ -1,0 +1,25 @@
+name: Refresh merged Steeple Stream playback changes
+on:
+  push:
+    branches: [deploy-happy-eyeballs-preview-oct11]
+    paths:
+      - .github/workflows/refresh-happy-eyeballs-oct11.yml
+permissions:
+  contents: write
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v27
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+      - name: Pin merged application revision
+        run: nix flake update steeple-stream
+      - name: Commit refreshed lockfile
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add flake.lock
+          git diff --cached --quiet || (git commit -m "Pin parallel WebRTC/HLS and early-play release" && git push)
