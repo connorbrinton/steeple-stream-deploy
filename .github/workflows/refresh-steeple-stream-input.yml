@@ -1,0 +1,27 @@
+name: Refresh Steeple Stream input
+on:
+  push:
+    branches: [deploy-sticky-preview-25svh]
+    paths:
+      - .github/workflows/refresh-steeple-stream-input.yml
+permissions:
+  contents: write
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: cachix/install-nix-action@v27
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+      - name: Update application input
+        run: nix flake update steeple-stream
+      - name: Commit lockfile
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add flake.lock
+          git diff --cached --quiet || (git commit -m "Update Steeple Stream to PR #37" && git push)
