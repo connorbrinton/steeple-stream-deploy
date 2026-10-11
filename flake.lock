@@ -120,7 +120,7 @@
       },
       "locked": {
         "lastModified": 1791677066,
-        "narHash": "sha256-/ANtpiymwbXdL/hVbG3rIhOuTuNFDBQ5Um3Ja+S4SXo=",
+        "narHash": "sha256-1cOJTnFt3yK3zE6H20DMTseocNsYI4rwJ2pPa7qXCY4=",
         "owner": "connorbrinton",
         "repo": "steeple-stream",
         "rev": "a745a92e2970ff4e67a42c4c6fed1193ae7c3cc7",
