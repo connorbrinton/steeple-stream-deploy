@@ -73,6 +73,32 @@
 
   nixpkgs.config.allowUnfree = true;
 
+  # The pinned nixpkgs has cloudflared 2026.1.1. Use Cloudflare's verified
+  # upstream Linux amd64 release containing the eMudhra trust-store fix
+  # (first shipped in 2026.10.2), without updating unrelated NixOS packages.
+  nixpkgs.overlays = [
+    (_final: prev: {
+      cloudflared = prev.stdenvNoCC.mkDerivation (finalAttrs: {
+        pname = "cloudflared";
+        version = "2026.10.7";
+        src = prev.fetchurl {
+          url = "https://github.com/cloudflare/cloudflared/releases/download/${finalAttrs.version}/cloudflared-linux-amd64";
+          # SHA256 from Cloudflare's official GitHub release asset and notes.
+          hash = "sha256-H5n7UYuD3sK6jYcKfMmR2Cp35hlilaPSdUuhern5GHI=";
+        };
+        dontUnpack = true;
+        dontPatchELF = true;
+        dontStrip = true;
+        installPhase = ''
+          runHook preInstall
+          install -Dm755 "$src" "$out/bin/cloudflared"
+          runHook postInstall
+        '';
+        meta = prev.cloudflared.meta;
+      });
+    })
+  ];
+
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.settings.trusted-users = [ "root" "@wheel" ];
 
