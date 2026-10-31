@@ -15,4 +15,8 @@ jobs:
           extra_nix_config: |
             experimental-features = nix-command flakes
       - run: nix flake check
+      - name: Verify packaged cloudflared version
+        run: |
+          package=$(nix build --no-link --print-out-paths .#nixosConfigurations.nixos.pkgs.cloudflared)
+          "$package/bin/cloudflared" --version | grep -F "2026.10.7"
       - run: nix build .#nixosConfigurations.nixos.config.system.build.toplevel
