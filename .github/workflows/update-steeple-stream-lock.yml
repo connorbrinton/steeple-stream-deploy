@@ -1,0 +1,32 @@
+name: Update Steeple Stream input (temporary)
+on:
+  push:
+    branches:
+      - deploy/offline-broadcaster-pr43
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: deploy/offline-broadcaster-pr43
+          persist-credentials: true
+      - uses: cachix/install-nix-action@v27
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+      - name: Update only Steeple Stream flake input
+        run: nix flake update steeple-stream
+      - name: Commit changed lockfile
+        run: |
+          if ! git diff --quiet -- flake.lock; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add flake.lock
+            git commit -m 'deploy: pin Steeple Stream offline broadcaster (PR #43)'
+            git push origin HEAD:deploy/offline-broadcaster-pr43
+          fi
