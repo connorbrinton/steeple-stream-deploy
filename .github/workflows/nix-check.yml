@@ -6,8 +6,7 @@ on:
     branches: [main]
 
 jobs:
-  lock:
-    name: Generate Steeple Stream Nix hash
+  nix:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,9 +14,9 @@ jobs:
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes
-      - name: Emit updated flake.lock
+      - run: nix flake check
+      - name: Verify packaged cloudflared version
         run: |
-          nix flake lock --update-input steeple-stream
-          echo 'STEEPLE_LOCK_BEGIN'
-          cat flake.lock
-          echo 'STEEPLE_LOCK_END'
+          package=$(nix build --no-link --print-out-paths .#nixosConfigurations.nixos.pkgs.cloudflared)
+          "$package/bin/cloudflared" --version | grep -F "2026.10.7"
+      - run: nix build .#nixosConfigurations.nixos.config.system.build.toplevel
