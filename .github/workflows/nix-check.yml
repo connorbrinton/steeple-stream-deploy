@@ -14,6 +14,12 @@ jobs:
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes
+      - name: Generate updated Steeple Stream flake lock metadata
+        run: |
+          nix flake lock --update-input steeple-stream
+          echo 'STEEPLE_LOCK_BEGIN'
+          cat flake.lock
+          echo 'STEEPLE_LOCK_END'
       - run: nix flake check
       - name: Verify packaged cloudflared version
         run: |
