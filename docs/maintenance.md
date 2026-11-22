@@ -1,8 +1,30 @@
 # Maintenance
 
+## Application Updates
+
+The deployment repository checks the application repository's `main` branch hourly
+and can also be run manually via **Actions → Propose application updates → Run workflow**.
+When the application revision changes, the workflow updates only the
+`steeple-stream` flake input, opens or refreshes
+`automation/update-steeple-stream` as a pull request, and dispatches the
+full **Nix Check** workflow on that proposed branch.
+
+The deployment pull request is **not** auto-merged: merging to deployment
+`main` is a production activation, since comin polls that branch. Verify
+the application change and the Nix Check result before merging. The update
+workflow does not need secrets or a personal access token; it uses the
+deployment repository's `GITHUB_TOKEN`.
+
+**One-time repository setting:** Under Settings → Actions → General →
+Workflow permissions, enable **Allow GitHub Actions to create and approve
+pull requests**. The automated PR does not require write access to the
+application repository. GitHub may also require a maintainer to approve
+workflows on a bot-created PR; the explicit Nix Check workflow dispatch
+ensures validation can run without relying on the PR event.
+
 ## Nix Input Updates
 
-Update a specific input:
+Other inputs can still be updated manually. Update a specific input:
 
 ```bash
 nix flake update nixpkgs
